@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
+// import {useState } from "react";
 
 const registerUser = async (req, res) => {
   try {
@@ -37,6 +38,21 @@ const registerUser = async (req, res) => {
     });
   }
 };
+
+// const Counter = ()=>{
+//   const [count, setCount] = useState(0);
+
+//   return (
+//     <div>
+
+//       <p>{count}</p>
+//       <button onClick={()=> setCount(prev=> prev + 1)}> + </button>
+//       <button onClick={()=> setCount(prev=> prev - 1)}> - </button>
+
+//     </div>
+//   )
+// }
+// export default Counter;
 
 const loginUser = async (req, res) => {
   try {
@@ -110,9 +126,9 @@ const updateProfileImage = async (req, res) => {
 };
 
 const getUsers = async (req, res) => {
-    const users = await User.find({}).select("-password");
+  const users = await User.find({}).select("-password");
 
-    res.json(users);
+  res.json(users);
 };
 
 const deleteUser = async (req, res) => {
@@ -132,31 +148,31 @@ const deleteUser = async (req, res) => {
 };
 
 const updateUserRole = async (req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
+  try {
+    const user = await User.findById(req.params.id);
 
-        if (!user) {
-            return res.status(404).json({
-                message: "User not found",
-            });
-        }
-
-        user.role =
-            user.role === "admin"
-                ? "user"
-                : "admin";
-
-        await user.save();
-
-        res.json({
-            message: "User role updated",
-            role: user.role,
-        });
-    } catch (error) {
-        res.status(500).json({
-            message: error.message,
-        });
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
     }
+
+    user.role =
+      user.role === "admin"
+        ? "user"
+        : "admin";
+
+    await user.save();
+
+    res.json({
+      message: "User role updated",
+      role: user.role,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
 };
 
 const createUser = async (req, res) => {

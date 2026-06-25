@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../api/axios";
 import toast from "react-hot-toast";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../redux/slices/authSlice";
 import { useNavigate, Link } from "react-router-dom";
 import {
@@ -17,6 +17,14 @@ import { isValidEmail, isValidPassword } from "../utils/validation";
 function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/profile");
+    }
+  }, [userInfo, navigate]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

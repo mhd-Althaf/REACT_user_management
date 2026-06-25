@@ -1,12 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../api/axios";
 import toast from "react-hot-toast";
 import { useNavigate, Link } from "react-router-dom";
 import { User, Mail, KeyRound, UserPlus, Eye, EyeOff } from "lucide-react";
 import { isValidEmail, isValidPassword } from "../utils/validation";
+import { useSelector } from "react-redux";
 
 function RegisterPage() {
   const navigate = useNavigate();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/profile");
+    }
+  }, [userInfo, navigate]);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -38,10 +47,6 @@ function RegisterPage() {
 
     if (!isValidPassword(password)) {
       return toast.error("Password must be at least 6 characters");
-    }
-
-    if (password !== confirmPassword) {
-      return toast.error("Passwords do not match");
     }
 
     try {

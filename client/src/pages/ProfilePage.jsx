@@ -39,6 +39,11 @@ function ProfilePage() {
       return;
     }
 
+    if (!image.type.startsWith("image/")) {
+      toast.error("Only image files are allowed!");
+      return;
+    }
+
     try {
       const formData = new FormData();
       formData.append("profileImage", image);
@@ -193,7 +198,16 @@ function ProfilePage() {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => setImage(e.target.files[0])}
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file && !file.type.startsWith("image/")) {
+                  toast.error("Only image files are allowed!");
+                  e.target.value = "";
+                  setImage(null);
+                } else {
+                  setImage(file);
+                }
+              }}
             />
             {!image ? (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>

@@ -13,7 +13,16 @@ router.post("/login", loginUser);
 router.put(
   "/profile-image",
   protect,
-  upload.single("profileImage"),
+  (req, res, next) => {
+    upload.single("profileImage")(req, res, (err) => {
+      if (err) {
+        return res.status(400).json({
+          message: err.message,
+        });
+      }
+      next();
+    });
+  },
   updateProfileImage
 );
 
